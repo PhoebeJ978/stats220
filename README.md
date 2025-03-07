@@ -13,4 +13,4 @@
 So, there are a few reasons why I'm taking this paper: 
 1. First and foremost, I *really* enjoyed stats in my first year and have been thinking about revisiting it for a while.
 2. This paper sounded really fun and interesting!
-3. I think some coding experience will be really good for me in my postgraduate years. I really want to go on to study [Postgraduate Psychology](https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/psychology/postgraduate.html), specifically [this programme](https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/master-of-behaviour-analysis.html), and coding plays a big role in postgraduate psychology!
+3. I think some coding experience will be really good for me in my postgraduate years. I really want to go on to study [postgraduate psychology](https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/psychology/postgraduate.html), specifically [this programme](https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/master-of-behaviour-analysis.html), and coding plays a big role in postgraduate psychology!
