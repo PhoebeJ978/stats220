@@ -1,0 +1,205 @@
+---
+title: My dynamic report
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+
+```
+
+```{css}
+
+h2 {
+  color: #1D1E2C;
+  font-family: cursive;
+  text-align: center;
+  border-bottom: 3px solid #AC9FBB;
+  border-top: 3px solid #AC9FBB;
+  font-weight: bold;
+  font-size: 25px;
+  padding:5px
+}
+
+h3 {
+  color: #1D1E2C;
+  font-family: cursive;
+   font-size: 20px;
+}
+
+body {
+  color: #1D1E2C;
+  font-size: 16px;
+  font-family: "Avenir";
+  text-align: justify;
+}
+```
+
+```{r}
+# Set up code for report
+library(tidyverse)
+library(reshape2)
+logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQqu1fvyGtzxnw60nJhbbVcUjQcQPPQe6LcYtkj4_L4kTehqcg7kbA5UPd_u8MGPdDcM-yirHkexFgH/pub?gid=901154010&single=true&output=csv")
+
+# New data frame 
+latest_data <- logged_data %>%
+  rename(timestamp = 1,
+         sitcom = 2,
+         season_number = 3,
+         episode_number = 4,
+         laugh_rating = 5,
+         funniness_rating = 6,
+         theme = 7,
+         emotion_rating = 8,
+         impact_rating = 9,
+         overall_rating = 10,
+         IMDB_rating = 11,
+         extra_comments = 12)
+
+# Creating subsets of variables to work with 
+MF_data <- latest_data %>% # All data from Modern Family
+  slice(1:10)
+
+B99_data <- latest_data %>% # All data from Brooklyn Nine-nine
+  slice(11:20)
+
+PnR_data <- latest_data %>% # All data from Parks and Recreation
+  slice (21:30)
+
+NotOftenLaugh <- latest_data %>% # Data where I answered that I did not laugh often
+  slice(2)
+
+AlwaysLaugh <- latest_data %>% # Data where I answered that I always laughed
+  slice(21, 23, 27, 29, 30)
+
+OftenLaugh <- latest_data %>% # Data where I answered that I often laughed
+  slice(4, 13, 14, 15, 19, 22, 24, 26, 28)
+
+SometimesLaugh <- latest_data %>% # Data where I answered that I sometimes laughed 
+  slice(1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 16, 17, 18, 20, 25)
+
+NotMuchResonance <- latest_data %>% # Data where I answered that an episode did not resonate much
+  slice(1, 2, 15, 16, 24)
+
+CompletelyResonance <- latest_data %>% # Data where I answered that an episode completely resonated 
+  slice(7, 8, 9, 14, 18, 19, 20, 28, 30)
+
+SomewhatResonance <- latest_data %>% # Data where I answered that an episode somewhat resonated 
+  slice(5, 10, 11, 13, 21, 23, 27)
+
+VeryMuchResonance <- latest_data %>% # Data where I answered that an episode resonated very much 
+  slice(3, 4, 6, 12, 17, 22, 25, 26, 29)
+```
+
+
+## A Comparison of my Favourite T.V. Sitcoms
+
+As a lover of sitcoms, I decided to carry out my data collection on various factors that I would think are important when considering the overall quality of any given episode. The aim of my data collection was, on a personal level, to identify which sitcom is my favourite, and on a wider level, was to identify what goes in to making a 'good' sitcom episode. In general, the data collected considers the funniness, emotional weight, themes, and overall opinion of the episodes I have used in my sample. For my sample, I have taken episodes from three different sitcoms: Modern Family, Brooklyn Nine-nine, and Parks and Recreation. From each of these shows, I watched the same seven episodes (season 6, episodes 5-11), with the starting point for these episodes being somewhat random and simply based on the episode of Modern Family I was already up to at the start of my data collection. Additionally, I then collected data from my three favourite episodes of each show.
+
+### Descriptive Statistics 
+
+To start, I was interested in looking at some simple, descriptive statistics:
+
+- The average overall rating I gave, out of 10, across all episodes and shows was `r mean(latest_data$overall_rating, na.rm = TRUE)`. This was `r mean(latest_data$overall_rating, na.rm = TRUE)-mean(latest_data$IMDB_rating, na.rm = TRUE)` points higher than the average critics' score of `r mean(latest_data$IMDB_rating, na.rm = TRUE)`.
+
+- The lowest rating I gave, out of 10, was `r min(latest_data$overall_rating, na.rm = TRUE)`, which I gave to just `r length(which(latest_data$overall_rating == 5))` episode.
+
+- The highest rating I gave, out of 10, was `r max(latest_data$overall_rating, na.rm = TRUE)`, which I gave to a whopping `r length(which(latest_data$overall_rating == 10))` episodes.
+
+
+### Graphs
+
+With my graphs, I wanted to delve deeper into a few measures. First, I wanted to take a look at how the average ratings, and how the funniness and emotional impact ratings, compared across the different sitcoms in my sample. In particular, I also looked at how my average rating for each sitcom compared to critics' average ratings. Second, I wanted to look at how important it is to an episode's rating that it is funny and that it is emotionally resonant. 
+
+---
+
+
+<br>
+```{r}
+mean_overall <- c(mean(MF_data$overall_rating), mean(B99_data$overall_rating), mean(PnR_data$overall_rating))
+mean_critics <- c(mean(MF_data$IMDB_rating), mean(B99_data$IMDB_rating), mean(PnR_data$IMDB_rating))
+sitcom <- c("Modern Family", "Brooklyn Nine-nine", "Parks and Recreation")
+
+df1 <- tibble(mean_overall, mean_critics, sitcom)
+rating.df <- melt(df1, id.vars='sitcom')
+
+ggplot(rating.df, aes(x=sitcom, y = value, fill = variable)) +
+  geom_bar(stat='identity', position='dodge') + 
+  labs(title = "Which Sitcom is Best?",
+       subtitle = "Comparing the average episode rating for different sitcoms, according to myself and to critics",
+       x = "Sitcom",
+       y = "Average Episode Rating",
+       fill = "Rating Source") +
+  scale_fill_manual(labels = c("Myself", "Critics (IMDB Score)"), values = c("#ffc8dd", "#cdb4db")) +
+  theme_light()
+```
+
+Given that all of these shows are among my favourites of all time, I was unsurprised that all of them had such high averages. However, I was surprised to see how low the average critics' score for Parks and Recreation was, with a mean score of just `r mean(PnR_data$IMDB_rating)`, a whole `r mean(PnR_data$overall_rating) - mean(PnR_data$IMDB_rating)` points lower than my own average score. Even more than that, Parks and Recreation had the lowest average critic score, but the highest average score for my own ratings. 
+
+---
+
+
+<br>
+```{r}
+mean_funniness <- c(mean(MF_data$funniness_rating), mean(B99_data$funniness_rating), mean(PnR_data$funniness_rating))
+mean_emotionality <- c(mean(MF_data$impact_rating), mean(B99_data$impact_rating), mean(PnR_data$impact_rating))
+
+df2 <- tibble(mean_funniness, mean_emotionality, sitcom)
+FunninessEmotionality.df <- melt(df2, id.vars='sitcom')
+
+ggplot(FunninessEmotionality.df, aes(x=sitcom, y = value, fill = variable)) +
+  geom_bar(stat='identity', position='dodge') + 
+  labs(title = "Are Sitcoms Funnier than they are Emotional?",
+       subtitle = "Comparing the average funniness and emotionality rating for different sitcoms",
+       x = "Sitcom",
+       y = "Average Score",
+       fill = "Factor") +
+  scale_fill_manual(labels = c("Funniness", "Emotional Impact"), values = c("#ffc8dd", "#cdb4db")) +
+  theme_light()
+```
+
+I was not surprised to see that, for all shows, the episodes were, on average, funnier than they were emotional. However, I was surprised to see that all of the shows had relatively high average ratings for emotional impact, with relatively small differences between the funniness and emotional impact scores for all the shows. However, I do think this could be partially related to the fact that, for all shows, my personal favourite episodes were all episodes that I rated highly on emotional impact, so these episodes might be driving up the averages. For example, the median emotional impact rating for Brooklyn Nine-nine was `r median(B99_data$impact_rating)`, which is `r mean(B99_data$impact_rating) - median(B99_data$impact_rating)` points lower than the mean. 
+
+---
+
+
+<br>
+```{r}
+## Graph for average rating depending on the laugh rating
+
+mean_laugh <- c(mean(NotOftenLaugh$overall_rating), mean(SometimesLaugh$overall_rating), mean(OftenLaugh$overall_rating), mean(AlwaysLaugh$overall_rating))
+laugh_rating <- c("Not Often", "Sometimes", "Often", "Always")
+Laugh.df <- tibble(mean_laugh, laugh_rating)
+
+ggplot(Laugh.df, aes(x = factor(laugh_rating, laugh_rating), y = mean_laugh)) + 
+  geom_bar(stat = 'identity', fill = "#ffc8dd") +
+  labs(title = "How Important is it to be Funny?",
+       subtitle = "Comparing the average rating of episodes by how often I laughed at them",
+       x = "How Often Laughed",
+       y = "Average Episode Rating") + 
+  theme_light()
+```
+
+Perhaps unsurprisingly, episodes in which I always laughed at the jokes had the highest average rating overall. Additionally, episodes where I did not often laugh had the lowest average rating (though it should be noted that the sample size was only 1 episode for this laugh rating). However, the difference between the average overall rating for episodes where I sometimes, often, or always laughed seems to be quite small. From this, it appears as though humour is important for how I perceive an episode's overall quality, but *only* to a point. Basically, humour is important, but it is **not** the only thing that matters.
+
+---
+
+
+<br>
+```{r}
+## Graph for average rating depending on the emotional resonance rating 
+
+mean_resonance <- c(mean(NotMuchResonance$overall_rating), mean(SomewhatResonance$overall_rating), mean(VeryMuchResonance$overall_rating), mean(CompletelyResonance$overall_rating))
+resonance_rating <- c("Not Much", "Somewhat", "Very Much", "Completely")
+Resonance.df <- tibble(mean_resonance, resonance_rating)
+
+ggplot(Resonance.df, aes(x = factor(resonance_rating, resonance_rating), y = mean_resonance)) + 
+  geom_bar(stat = 'identity', fill = "#cdb4db") +
+  labs(title = "Does Tugging at the Heartstrings Work?",
+       subtitle = "Comparing the average rating of episodes by how much they emotionally resonated",
+       x = "How Much Episode Resonated",
+       y = "Average Episode Rating") + 
+  theme_light()
+```
+
+The average rating for episodes in all of the categories of emotional resonance were reasonably similar, though, again unsurprisingly, episodes that barely resonated scored lower on average and episodes that completely resonated scored higher on average. In essence, while greater emotional resonance does improve the average rating of an episode, high ratings can still be achieved without strong emotional resonance. However, it is worth noting that the average rating of episodes that completely resonated was close to a perfect score. This suggests that, while good episodes do not need to strongly emotionally resonate, those that do almost certainly **will** be excellent episodes. 
