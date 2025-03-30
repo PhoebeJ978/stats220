@@ -207,6 +207,7 @@ The average rating for episodes in all of the categories of emotional resonance 
 
 ### Bonus!
 
+```{r}
 image_blank(width = 400,
                          height = 200,
                          color = "#FFFFFF") %>%
@@ -217,3 +218,4 @@ image_annotate(text = "University: we really listen to our students' \nfeedback!
                  gravity = "west",
                  size = 20,
                  font = "Helvetica")
+```
