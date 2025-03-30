@@ -38,6 +38,7 @@ body {
 ```{r}
 # Set up code for report
 library(tidyverse)
+install.packages("reshape2")
 library(reshape2)
 logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQqu1fvyGtzxnw60nJhbbVcUjQcQPPQe6LcYtkj4_L4kTehqcg7kbA5UPd_u8MGPdDcM-yirHkexFgH/pub?gid=901154010&single=true&output=csv")
 
