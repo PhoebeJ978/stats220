@@ -210,7 +210,7 @@ Out of respect for the one optional comment I left while completing my data coll
 
 ```{r}
 image_text <- image_blank(width = 500,
-                         height = 100,
+                         height = 75,
                          color = "#FFFFFF") %>%
   image_annotate(text = "Me whenever there's a scene of Leslie and Ben:",
                  color = "#000000",
