@@ -38,6 +38,7 @@ body {
 ```{r}
 # Set up code for report
 library(tidyverse)
+library(magick)
 logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQqu1fvyGtzxnw60nJhbbVcUjQcQPPQe6LcYtkj4_L4kTehqcg7kbA5UPd_u8MGPdDcM-yirHkexFgH/pub?gid=901154010&single=true&output=csv")
 
 # New data frame 
@@ -202,3 +203,17 @@ ggplot(Resonance.df, aes(x = factor(resonance_rating, resonance_rating), y = mea
 ```
 
 The average rating for episodes in all of the categories of emotional resonance were reasonably similar, though, again unsurprisingly, episodes that barely resonated scored lower on average and episodes that completely resonated scored higher on average. In essence, while greater emotional resonance does improve the average rating of an episode, high ratings can still be achieved without strong emotional resonance. However, it is worth noting that the average rating of episodes that completely resonated was close to a perfect score. This suggests that, while good episodes do not need to strongly emotionally resonate, those that do almost certainly **will** be excellent episodes. 
+
+
+### Bonus!
+
+image_blank(width = 400,
+                         height = 200,
+                         color = "#FFFFFF") %>%
+image_annotate(text = "University: we really listen to our students' \nfeedback!
+                 \nStudents: can you please just make SSO \nusable?
+                 \nUniversity:",
+                 color = "#000000",
+                 gravity = "west",
+                 size = 20,
+                 font = "Helvetica")
