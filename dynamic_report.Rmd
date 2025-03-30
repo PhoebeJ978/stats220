@@ -99,7 +99,7 @@ As a lover of sitcoms, I decided to carry out my data collection on various fact
 
 To start, I was interested in looking at some simple, descriptive statistics:
 
-- The average overall rating I gave, out of 10, across all episodes and shows was `r mean(latest_data$overall_rating, na.rm = TRUE)`. This was `r mean(latest_data$overall_rating, na.rm = TRUE)-mean(latest_data$IMDB_rating, na.rm = TRUE)` points higher than the average critics' score of `r mean(latest_data$IMDB_rating, na.rm = TRUE)`.
+- The average overall rating I gave, out of 10, across all episodes and shows was `r mean(latest_data$overall_rating, na.rm = TRUE) %>% round(2)`. This was `r mean(latest_data$overall_rating, na.rm = TRUE) %>% round(2) - mean(latest_data$IMDB_rating, na.rm = TRUE) %>% round(2)` points higher than the average critics' score of `r mean(latest_data$IMDB_rating, na.rm = TRUE) %>% round(2)`.
 
 - The lowest rating I gave, out of 10, was `r min(latest_data$overall_rating, na.rm = TRUE)`, which I gave to just `r length(which(latest_data$overall_rating == 5))` episode.
 
