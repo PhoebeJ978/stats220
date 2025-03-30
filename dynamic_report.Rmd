@@ -110,9 +110,6 @@ To start, I was interested in looking at some simple, descriptive statistics:
 
 With my graphs, I wanted to delve deeper into a few measures. First, I wanted to take a look at how the average ratings, and how the funniness and emotional impact ratings, compared across the different sitcoms in my sample. In particular, I also looked at how my average rating for each sitcom compared to critics' average ratings. Second, I wanted to look at how important it is to an episode's rating that it is funny and that it is emotionally resonant. 
 
----
-
-
 <br>
 ```{r}
 mean_overall <- c(mean(MF_data$overall_rating), mean(B99_data$overall_rating), mean(PnR_data$overall_rating))
