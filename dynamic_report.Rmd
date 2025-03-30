@@ -206,16 +206,22 @@ The average rating for episodes in all of the categories of emotional resonance 
 
 
 ### Bonus!
+Out of respect for the one optional comment I left while completing my data collection ("`r latest_data$extra_comments[30]`"), I thought I would hearken back to the days of using the sweet, simple {magick} package.
 
 ```{r}
-image_blank(width = 400,
-                         height = 200,
+image_text <- image_blank(width = 500,
+                         height = 100,
                          color = "#FFFFFF") %>%
-image_annotate(text = "University: we really listen to our students' \nfeedback!
-                 \nStudents: can you please just make SSO \nusable?
-                 \nUniversity:",
+  image_annotate(text = "Me whenever there's a scene of Leslie and Ben:",
                  color = "#000000",
                  gravity = "west",
                  size = 20,
                  font = "Helvetica")
+
+image <- image_read("https://external-preview.redd.it/LJYEsfvd2ovj1R1TDfjoVWbwmCsGqh23jkf8DmVZCLo.png?auto=webp&s=6ddf814e14ce071dfdb47287a4bbde57434769fd") %>%
+  image_scale(500)
+
+image_vector <- c(image_text, image)
+
+image_append(image_vector, stack = TRUE)
 ```
